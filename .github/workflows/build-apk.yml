@@ -29,10 +29,10 @@ jobs:
         run: ionic build
 
       - name: Install Capacitor
-        run: npm install @capacitor/core @capacitor/cli
+        run: npm install @capacitor/core @capacitor/cli @capacitor/android
 
       - name: Initialize Capacitor
-        run: npx cap init "RouteTracker" "com.example.routetracker"
+        run: npx cap init RouteTracker com.example.routetracker
 
       - name: Add Android platform
         run: npx cap add android
