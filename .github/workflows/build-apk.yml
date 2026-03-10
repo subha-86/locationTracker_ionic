@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Ionic Android APK
 
 on:
   push:
@@ -12,10 +12,10 @@ jobs:
     steps:
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 22
 
@@ -25,14 +25,23 @@ jobs:
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
 
-      - name: Build Ionic App
+      - name: Build Ionic app
         run: ionic build
 
-      - name: Sync Capacitor
-        run: npx cap sync android
+      - name: Install Capacitor
+        run: npm install @capacitor/core @capacitor/cli
+
+      - name: Initialize Capacitor
+        run: npx cap init "RouteTracker" "com.example.routetracker"
+
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Sync project
+        run: npx cap sync
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
