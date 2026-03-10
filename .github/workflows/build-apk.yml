@@ -28,17 +28,8 @@ jobs:
       - name: Build Ionic app
         run: ionic build
 
-      - name: Install Capacitor
-        run: npm install @capacitor/core @capacitor/cli @capacitor/android
-
-      - name: Initialize Capacitor
-        run: npx cap init RouteTracker com.example.routetracker
-
-      - name: Add Android platform
-        run: npx cap add android
-
-      - name: Sync project
-        run: npx cap sync
+      - name: Sync Capacitor
+        run: npx cap sync android
 
       - name: Setup Java
         uses: actions/setup-java@v4
