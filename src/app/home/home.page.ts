@@ -2,6 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonItem } from '@ionic/angular/standalone';
 import { NgIf } from '@angular/common';
 import * as L from 'leaflet';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 // Fix Leaflet marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -117,7 +118,8 @@ export class HomePage implements AfterViewInit {
 
   }
 
-  exportGPX() {
+  // ✅ FIXED GPX EXPORT FOR ANDROID
+  async exportGPX() {
 
     if (this.routePoints.length === 0) {
       alert("No route recorded");
@@ -125,7 +127,7 @@ export class HomePage implements AfterViewInit {
     }
 
     let gpx = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="IonicTracker">
+<gpx version="1.1" creator="RouteTracker">
 <trk>
 <trkseg>
 `;
@@ -144,12 +146,23 @@ export class HomePage implements AfterViewInit {
 </trk>
 </gpx>`;
 
-    const blob = new Blob([gpx], { type: "application/gpx+xml" });
+    try {
 
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "route.gpx";
-    link.click();
+      await Filesystem.writeFile({
+        path: 'route.gpx',
+        data: gpx,
+        directory: Directory.Documents,
+        encoding: Encoding.UTF8,
+      });
+
+      alert("GPX file saved to Documents folder");
+
+    } catch (error) {
+
+      console.error(error);
+      alert("Error saving GPX file");
+
+    }
 
   }
 
